@@ -11,11 +11,16 @@ class Index extends Component
     use WithPagination;
 
     /**
+    * define public variable
+    */
+    public $productId;
+
+    /**
      * Destroy function
      */
-    public function destroy($productId)
+    public function destroy()
     {
-        $product = Product::findOrFail($productId);
+        $product = Product::findOrFail($this->productId);
 
         $product->transactions()->delete();
         $product->delete();
@@ -28,10 +33,18 @@ class Index extends Component
 
     }
 
+    /**
+     * deleteId function
+     */
+    public function deleteId($id)
+    {
+        $this->productId = $id;
+    }
+
     public function render()
     {
         return view('livewire.product.index', [
-            'products' => Product::latest()->paginate(5)
+            'products' => Product::latest()->paginate(6)
         ])->layout('layouts.dashboard');
     }
 }

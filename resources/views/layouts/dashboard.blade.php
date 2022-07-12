@@ -15,7 +15,6 @@
     <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- Main Styling -->
     <link rel="stylesheet" href="{{ asset('css/styles.min.css') }}">
-
     <!-- Styles -->
     @livewireStyles
 </head>
@@ -37,6 +36,8 @@
             <x-footer-dashboard />
         </div>
     </main>
+
+    <script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
 
     @livewireScripts
 </body>

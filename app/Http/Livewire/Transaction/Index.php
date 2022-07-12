@@ -11,11 +11,16 @@ class Index extends Component
     use WithPagination;
 
     /**
+    * define public variable
+    */
+    public $transactionId;
+
+    /**
      * destroy function
      */
-    public function destroy($transactionId)
+    public function destroy()
     {
-        $transaction = Transaction::find($transactionId);
+        $transaction = Transaction::find($this->transactionId);
 
         if($transaction) {
             $transaction->delete();
@@ -27,6 +32,14 @@ class Index extends Component
         //redirect
         return redirect()->route('transaction.index');
 
+    }
+
+    /**
+     * deleteId function
+     */
+    public function deleteId($id)
+    {
+        $this->transactionId = $id;
     }
 
     public function render()

@@ -18,7 +18,7 @@ class Update extends Component
     /**
      * mount or construct function
      */
-    public function mount($id)
+    public function mount($id = null)
     {
         $product = Product::find($id);
         if($product) {

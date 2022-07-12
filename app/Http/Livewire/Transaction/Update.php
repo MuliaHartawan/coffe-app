@@ -14,12 +14,12 @@ class Update extends Component
     /**
     * define public variable
     */
-    public $transactionId, $productId, $products, $quantity,$amount, $price;
+    public $transactionId, $productId, $products = null, $quantity,$amount, $price;
 
     /**
      * mount or construct function
      */
-    public function mount($id)
+    public function mount($id = null)
     {
         $transaction = Transaction::find($id);
         if($transaction) {
@@ -55,7 +55,6 @@ class Update extends Component
                 ]);
             }
 
-
             $transaction->update([
                 'product_id' => $this->productId,
                 'user_id' => Auth::user()->id,
@@ -73,8 +72,8 @@ class Update extends Component
 
         } catch (\Throwable $th) {
             DB::rollback();
-
-            return $th->getMessage();
+            dd($th->getMessage());
+            return  redirect()->route('transaction.index')->with('message', $th->getMessage());
         }
 
 

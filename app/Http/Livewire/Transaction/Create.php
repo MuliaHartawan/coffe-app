@@ -15,8 +15,8 @@ class Create extends Component
     */
     public $productId;
     public $quantity;
-    public $price;
-    public $amount;
+    public $price = 0;
+    public $amount = 0;
     public $userId;
 
     /**
@@ -50,8 +50,8 @@ class Create extends Component
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollback();
-
-            return $th->getMessage();
+            dd($th->getMessage());
+            return  redirect()->route('transaction.index')->with('message', $th->getMessage());
         }
 
          //flash message
