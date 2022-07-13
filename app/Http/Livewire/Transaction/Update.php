@@ -14,7 +14,13 @@ class Update extends Component
     /**
     * define public variable
     */
-    public $transactionId, $productId, $products = null, $quantity,$amount, $price;
+    public $transactionId;
+    public $productId;
+    public $products = null;
+    public $quantity;
+    public $amount;
+    public $price;
+    public $stock;
 
     /**
      * mount or construct function
@@ -97,18 +103,18 @@ class Update extends Component
      */
     public function updated($field, $value)
     {
-        $this->validateOnly($field,[
-            'productId' => 'required',
-            'quantity' => 'required|numeric',
-        ]);
-
         if($field == 'productId'){
             $product = Product::find($value);
+            $this->stock = $product->stock;
             $this->price = $product->price;
         }
         if($field == 'quantity'){
-            $this->amount = $this->price * $value;
+            $this->amount = $this->price * (int)$value;
         }
 
+        $this->validateOnly($field,[
+            'productId' => 'required',
+            'quantity' => 'required|numeric|max:'. $this->stock,
+        ]);
     }
 }

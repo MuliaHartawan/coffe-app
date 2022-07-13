@@ -18,6 +18,7 @@ class Create extends Component
     public $price = 0;
     public $amount = 0;
     public $userId;
+    public $stock;
 
     /**
      * store function
@@ -29,7 +30,7 @@ class Create extends Component
 
         $this->validate([
             'productId' => 'required',
-            'quantity' => 'required|numeric|max:' . $product->price,
+            'quantity' => 'required|numeric|max:' . $product->stock,
         ]);
 
         DB::beginTransaction();
@@ -72,18 +73,18 @@ class Create extends Component
      */
     public function updated($field, $value)
     {
-        $this->validateOnly($field,[
-            'productId' => 'required',
-            'quantity' => 'required|numeric',
-        ]);
-
         if($field == 'productId'){
             $product = Product::find($value);
+            $this->stock = $product->stock;
             $this->price = $product->price;
         }
         if($field == 'quantity'){
-            $this->amount = $this->price * $value;
+            $this->amount = $this->price * (int)$value;
         }
 
+        $this->validateOnly($field,[
+            'productId' => 'required',
+            'quantity' => 'required|numeric|max:'. $this->stock,
+        ]);
     }
 }
