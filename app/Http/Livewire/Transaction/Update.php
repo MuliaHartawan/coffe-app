@@ -57,7 +57,7 @@ class Update extends Component
             if($transaction->product_id != $this->productId)
             {
                 $product->update([
-                    'stock' => $transaction->product->stock + $this->quantity,
+                    'stock' => $transaction->product->stock + $transaction->quantity,
                 ]);
             }
 
