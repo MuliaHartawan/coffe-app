@@ -2,17 +2,15 @@
 
 namespace Tests\Feature\Livewire\Products;
 
-use App\Http\Livewire\Product\Update;
+use App\Http\Livewire\Product\Index;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-class UpdateProductTest extends TestCase
+class ListProductTest extends TestCase
 {
     use RefreshDatabase;
     /**
@@ -20,71 +18,37 @@ class UpdateProductTest extends TestCase
      *
      * @return void
      */
-    public function test_it_can_show_update_product_page()
+    public function test_it_can_show_list_products_page()
     {
         $this->actingAs(User::factory()->create(['name' => 'admin']));
 
-        $product = Product::factory()->create()->id;
-
-        $this->get('/dashboard/product/edit/' . $product)
+        $this->get('/dashboard/product')
             ->assertOk();
     }
 
-    public function it_performs_a_validation()
-    {
-        Livewire::test(Update::class)
-            ->set('title', '')
-            ->set('price', '')
-            ->set('stock' ,'')
-            ->set('image' , '')
-            ->call('store')
-            ->assertHasErrors([
-                'title' => 'required',
-                'price' => 'required',
-                'stock' => 'required',
-                'image' => 'required',
-            ]);
-    }
-
-    /** @test */
-    public function it_can_update_product()
+    public function test_it_shows_all_the_products()
     {
         $this->actingAs(User::factory()->create(['name' => 'admin']));
 
         $product = Product::factory()->create();
 
-        Storage::fake('avatars');
-
-        $file = UploadedFile::fake()->image('avatar.png');
-
-        Livewire::test(Update::class)
-            ->set('title','Cappucino')
-            ->set('price', 5)
-            ->set('stock' , 100)
-            ->set('image' , $file)
-            ->call('update');
-
-            $this->assertTrue(Product::whereTitle(Product::latest()->first()->title)->exists());
-            $this->assertTrue(Product::wherePrice(Product::latest()->first()->price)->exists());
-            $this->assertTrue(Product::whereStock(Product::latest()->first()->stock)->exists());
-            $this->assertTrue(Product::whereImage(Product::latest()->first()->image)->exists());
+        $this->get('/dashboard/product')
+            ->assertSee($product->title)
+            ->assertSee($product->price)
+            ->assertSee($product->stock)
+            ->assertSee($product->image);
     }
 
-     /** @test */
-    public function it_can_redirected_to_product_page_after_updation()
+    public function test_it_can_delete_product()
     {
         $this->actingAs(User::factory()->create(['name' => 'admin']));
 
-        Storage::fake('avatars');
+        $product = Product::factory()->create();
 
-        $file = UploadedFile::fake()->image('avatar.png');
+        Livewire::test(Index::class)
+            ->set('productId', $product->id)
+            ->call('destroy');
 
-        Livewire::test(Update::class)
-            ->set('title','Cappucino')
-            ->set('price', 5)
-            ->set('stock' , 100)
-            ->set('image' , $file)
-            ->call('update')
-            ->assertRedirect('/dashboard/product');
+        $this->assertNull($product->fresh());
     }
 }

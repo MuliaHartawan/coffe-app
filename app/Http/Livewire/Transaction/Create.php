@@ -51,7 +51,7 @@ class Create extends Component
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollback();
-            dd($th->getMessage());
+
             return  redirect()->route('transaction.index')->with('message', $th->getMessage());
         }
 

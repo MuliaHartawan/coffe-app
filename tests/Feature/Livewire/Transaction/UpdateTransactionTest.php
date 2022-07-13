@@ -63,15 +63,15 @@ class UpdateTransactionTest extends TestCase
     }
 
      /** @test */
-    // public function it_can_redirected_to_transaction_page_after_updation()
-    // {
-    //     $this->actingAs(User::factory()->create(['name' => 'admin']));
+    public function it_can_redirected_to_transaction_page_after_updation()
+    {
+        $this->actingAs(User::factory()->create(['name' => 'admin']));
 
-    //     Livewire::test(Update::class)
-    //         ->set('productId', Product::factory()->create()->id)
-    //         ->set('quantity', 5)
-    //         ->set('amount', 25)
-    //         ->call('update')
-    //         ->assertRedirect('/dashboard/transaction');
-    // }
+        Livewire::test(Update::class)
+            ->set('productId', Product::factory()->create()->id)
+            ->set('quantity', 5)
+            ->set('amount', 25)
+            ->call('update')
+            ->assertRedirect('/dashboard/transaction');
+    }
 }

@@ -16,7 +16,7 @@ class Update extends Component
     */
     public $transactionId;
     public $productId;
-    public $products = null;
+    public $products = [];
     public $quantity;
     public $amount;
     public $price;
@@ -78,7 +78,7 @@ class Update extends Component
 
         } catch (\Throwable $th) {
             DB::rollback();
-            dd($th->getMessage());
+
             return  redirect()->route('transaction.index')->with('message', $th->getMessage());
         }
 
